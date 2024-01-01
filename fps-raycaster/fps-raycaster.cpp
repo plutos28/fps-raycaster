@@ -49,6 +49,9 @@ int main()
     const size_t map_w = 16;
     const size_t map_h = 16;
 
+    float player_x = 3.456;
+    float player_y = 2.345;
+
     const char map[] = "0000222222220000"\
                        "1              0"\
                        "1      11111   0"\
@@ -68,15 +71,25 @@ int main()
 
     assert(sizeof(map) == map_w * map_h + 1);
 
-    // fill screen with color gradients
+    // fill screen with white
     for (size_t j = 0; j < win_h; j++) { // go through each row
         for (size_t i = 0; i < win_w; i++) { // for every column in a row, change its colors
-            uint8_t r = 255 * j / float(win_h);
-            uint8_t g = 255 * i / float(win_w);
-            uint8_t b = 0;
+            uint8_t r = 255;
+            uint8_t g = 255;
+            uint8_t b = 255;
             framebuffer[i + j * win_w] = pack_color(r, g, b); // set the specific pixel to the combination of r, g, and b
         }
     }
+
+    // fill screen with color gradients
+    //for (size_t j = 0; j < win_h; j++) { // go through each row
+    //    for (size_t i = 0; i < win_w; i++) { // for every column in a row, change its colors
+    //        uint8_t r = 255 * j / float(win_h);
+    //        uint8_t g = 255 * i / float(win_w);
+    //        uint8_t b = 0;
+    //        framebuffer[i + j * win_w] = pack_color(r, g, b); // set the specific pixel to the combination of r, g, and b
+    //    }
+    //}
 
     // draw out the map
     const size_t rect_w = win_w / map_w;
@@ -88,9 +101,12 @@ int main()
             size_t rect_x = i * rect_w;
             size_t rect_y = j * rect_h;
             draw_rectangle(framebuffer, win_w, win_h, rect_x, rect_y, rect_w, rect_h, pack_color
-            (0, 255, 255));
+            (255, 0, 255));
         }
     }
+
+    // draw the player on the map
+    draw_rectangle(framebuffer, win_w, win_h, player_x * rect_w, player_y * rect_h, 10, 10, pack_color(0, 255, 0));
 
     drop_ppm_image("./out.ppm", framebuffer, win_w, win_h);
 
